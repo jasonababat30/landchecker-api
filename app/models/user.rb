@@ -13,6 +13,10 @@ class User < ApplicationRecord
             uniqueness: true,
             format: { with: URI::MailTo::EMAIL_REGEXP }
 
+  validates :password,
+          length: { minimum: 8 },
+          if: -> { password.present? }
+
   private
 
   def normalize_email

@@ -32,6 +32,21 @@ class PropertiesController < ApplicationController
     }
   end
 
+  def show
+    property = Property.find_by(
+      id: params[:id],
+      status: "available"
+    )
+
+    unless property
+      return render json: {
+        error: "Property not found"
+      }, status: :not_found
+    end
+
+    render json: { data: property }
+  end
+
   private
 
   def validated_filters

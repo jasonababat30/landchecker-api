@@ -11,4 +11,8 @@ Rails.application.routes.draw do
 
   post "/auth/register", to: "auth#register"
   post "/auth/login", to: "auth#login"
+
+  get "/watchlist", to: "watchlist#index"
+  post "/watchlist", to: "watchlist#create"
+  delete "/watchlist/:property_id", to: "watchlist#destroy"
 end

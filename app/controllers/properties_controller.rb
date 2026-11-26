@@ -11,8 +11,8 @@ class PropertiesController < ApplicationController
       "title ILIKE ?",
       "%#{ActiveRecord::Base.sanitize_sql_like(filters[:title])}%"
     ) if filters[:title]
-    properties = properties.where(bedrooms: filters[:bedrooms]) if filters[:bedrooms]
     properties = properties.where(property_type: filters[:property_type]) if filters[:property_type]
+    properties = properties.where(bedrooms: filters[:bedrooms]) if filters[:bedrooms]
     properties = properties.where("price >= ?", filters[:min_price]) if filters[:min_price]
     properties = properties.where("price <= ?", filters[:max_price]) if filters[:max_price]
 

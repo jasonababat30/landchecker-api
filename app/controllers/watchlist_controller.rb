@@ -5,7 +5,6 @@ class WatchlistController < ApplicationController
 
   def index
     properties = current_user.saved_properties
-      .where(status: "available")
       .order(created_at: :desc, id: :desc)
 
     render json: { data: properties }

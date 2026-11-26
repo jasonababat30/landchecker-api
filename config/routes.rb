@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   # root "posts#index"
   mount ActionCable.server => "/cable"
 
-  resources :properties, only: [ :index, :show ]
+  resources :properties, only: [ :index, :show, :create, :update ]
 
   post "/auth/register", to: "auth#register"
   post "/auth/login", to: "auth#login"

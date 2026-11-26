@@ -7,10 +7,14 @@ class PropertiesController < ApplicationController
 
     properties = Property.where(status: "available")
 
-    properties = properties.where("price >= ?", filters[:min_price]) if filters[:min_price]
-    properties = properties.where("price <= ?", filters[:max_price]) if filters[:max_price]
+    properties = properties.where(
+      "title ILIKE ?",
+      "%#{ActiveRecord::Base.sanitize_sql_like(filters[:title])}%"
+    ) if filters[:title]
     properties = properties.where(bedrooms: filters[:bedrooms]) if filters[:bedrooms]
     properties = properties.where(property_type: filters[:property_type]) if filters[:property_type]
+    properties = properties.where("price >= ?", filters[:min_price]) if filters[:min_price]
+    properties = properties.where("price <= ?", filters[:max_price]) if filters[:max_price]
 
     total = properties.count
     page = filters[:page]
@@ -55,6 +59,7 @@ class PropertiesController < ApplicationController
       max_price: parse_number(:max_price),
       bedrooms: parse_integer(:bedrooms),
       property_type: params[:property_type].presence,
+      title: params[:title].presence,
       page: parse_integer(:page, default: 1),
       per_page: parse_integer(:per_page, default: 10)
     }

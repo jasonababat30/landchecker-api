@@ -51,6 +51,37 @@ class PropertiesController < ApplicationController
     render json: { data: property }
   end
 
+  def create
+    property = Property.new(property_params)
+
+    if property.save
+      render json: { data: property }, status: :created
+    else
+      render json: { errors: property.errors.full_messages },
+            status: :unprocessable_entity
+    end
+  end
+
+  def update
+    property = Property.find_by(id: params[:id])
+
+    unless property
+      return render json: {
+        error: "Property not found"
+      }, status: :not_found
+    end
+
+    if property.update(property_params)
+      render json: {
+        data: property
+      }, status: :ok
+    else
+      render json: {
+        errors: property.errors.full_messages
+      }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def validated_filters
@@ -116,5 +147,15 @@ class PropertiesController < ApplicationController
 
   def render_error(message)
     render json: { error: message }, status: :bad_request
+  end
+
+  def property_params
+    params.require(:property).permit(
+      :title,
+      :price,
+      :bedrooms,
+      :property_type,
+      :status
+    )
   end
 end
